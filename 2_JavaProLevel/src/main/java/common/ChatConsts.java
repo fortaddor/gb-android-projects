@@ -19,4 +19,6 @@ public class ChatConsts
 
     public static final String SERVER_HOST = "localhost";
     public static final int SERVER_PORT = 8080;
+
+    public static final int AUTH_TIMEOUT = 120;
 }

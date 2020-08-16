@@ -4,6 +4,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.concurrent.TimeoutException;
 
 import static common.ChatConsts.*;
 
@@ -34,7 +39,7 @@ public class ClientHandler
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
                 finally
                 {
@@ -50,34 +55,62 @@ public class ClientHandler
 
     public void authentication() throws IOException
     {
+       this.startTimeout(LocalDateTime.now());
+
         while (true)
         {
             String str = in.readUTF();
-            if (str.startsWith(KEY_AUTH))
+            if (!str.startsWith(KEY_AUTH))
             {
-                String[] parts = str.split(STR_SPLIT);
-                String nick = this.myServer.getAuthService().getNickByLoginPass(parts[1], parts[2]);
-                if (nick != null)
+                continue;
+            }
+            
+            String[] parts = str.split(STR_SPLIT);
+            String nick = this.myServer.getAuthService().getNickByLoginPass(parts[1], parts[2]);
+            if (nick != null)
+            {
+                if (!this.myServer.isUserOnline(nick))
                 {
-                    if (!this.myServer.isUserOnline(nick))
-                    {
-                        this.sendMsg(String.format(FORMAT_AUTHOK_2_PARAMS, KEY_AUTHOK, nick));
-                        this.name = nick;
-                        this.myServer.subscribe(this);
+                    this.sendMsg(String.format(FORMAT_AUTHOK_2_PARAMS, KEY_AUTHOK, nick));
+                    this.name = nick;
+                    this.myServer.subscribe(this);
 
-                        return;
-                    }
-                    else
-                    {
-                        this.sendMsg("User is already online");
-                    }
+                    return;
                 }
                 else
                 {
-                    this.sendMsg("Wrong user or password");
+                    this.sendMsg("User is already online");
                 }
             }
+            else
+            {
+                this.sendMsg("Wrong user or password");
+            }
         }
+    }
+
+    private void startTimeout(LocalDateTime startTime)
+    {
+        Thread timeoutThread = new Thread(() -> {
+
+            while (true)
+            {
+                if (!this.getName().equals(STR_EMPTY))
+                {
+                    break;
+                }
+
+                if (Duration.between(startTime, LocalDateTime.now()).getSeconds() > AUTH_TIMEOUT)
+                {
+                    System.out.println("The authentication time is over. Bye!");
+                    this.closeConnection();
+                    break;
+                }
+            }
+        });
+
+        timeoutThread.setDaemon(true);
+        timeoutThread.start();
     }
 
     public void readMessages() throws IOException
