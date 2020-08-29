@@ -44,7 +44,7 @@ public class Network implements Closeable
         try
         {
             connect();
-            out.writeUTF(String.format(FORMAT_LOGIN_3_PARAMS, KEY_AUTH, login, password));
+            this.out.writeUTF(String.format(FORMAT_LOGIN_3_PARAMS, KEY_AUTH, login, password));
         }
         catch (IOException e)
         {
@@ -70,7 +70,7 @@ public class Network implements Closeable
                 {
                     while (true)
                     {
-                        String msg = in.readUTF();
+                        String msg = this.in.readUTF();
                         String[] tokens = msg.split(STR_SPLIT);
 
                         if (tokens[0].startsWith(KEY_AUTHOK))
@@ -152,7 +152,7 @@ public class Network implements Closeable
     public void close()
     {
         this.callOnCloseConnection.callback();
-        this.close(in, out, socket);
+        this.close(this.in, this.out, this.socket);
     }
 
     private void close(Closeable... objects)
