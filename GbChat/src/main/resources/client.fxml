@@ -6,14 +6,34 @@
 		<PasswordField HBox.hgrow="ALWAYS" fx:id="passField" promptText="Password" onAction="#sendAuth"/>
 		<Button HBox.hgrow="ALWAYS" text="Login" onAction="#sendAuth"/>
 	</HBox>
-	
-	<HBox fx:id="infoPanel" VBox.vgrow="ALWAYS">
-		<TextArea HBox.hgrow="ALWAYS" fx:id="textArea" editable="false"/>
-		<ListView fx:id="clientsList" minWidth="200" maxWidth="200"/>
-	</HBox>
-	
-	<HBox fx:id="msgPanel">
-		<TextField fx:id="msgField" promptText="Your message..." HBox.hgrow="ALWAYS" onAction="#sendMsg"/>
-		<Button text="Send" onAction="#sendMsg"/>
-	</HBox>
+
+	<VBox fx:id="mainPanel" VBox.vgrow="ALWAYS">
+		<HBox fx:id="infoPanel" VBox.vgrow="ALWAYS">
+			<TextArea HBox.hgrow="ALWAYS" fx:id="textArea" editable="false"/>
+			<ListView fx:id="clientsList" minWidth="200" maxWidth="200">
+				<contextMenu>
+					<ContextMenu fx:id="listContextMenu">
+						<items>
+							<MenuItem text="Send private message" onAction="#sendPrivateMsg" />
+						</items>
+					</ContextMenu>
+				</contextMenu>
+			</ListView>
+		</HBox>
+
+		<HBox fx:id="msgPanel">
+			<TextField fx:id="msgField" promptText="Your message..." HBox.hgrow="ALWAYS" onAction="#sendMsg">
+				<contextMenu>
+					<ContextMenu fx:id="msgContextMenu">
+						<items>
+							<MenuItem text="Send private message" onAction="#sendPrivateMsg" />
+							<MenuItem text="Change nickname" onAction="#changeNick" />
+							<MenuItem text="Exit" onAction="#sendExit" />
+						</items>
+					</ContextMenu>
+				</contextMenu>
+			</TextField>
+			<Button text="Send" onAction="#sendMsg"/>
+		</HBox>
+	</VBox>
 </VBox>

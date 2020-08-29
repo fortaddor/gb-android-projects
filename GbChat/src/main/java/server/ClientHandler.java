@@ -1,9 +1,12 @@
 package server;
 
+import entity.User;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 import static common.ChatConsts.*;
 
@@ -14,7 +17,7 @@ public class ClientHandler
     private DataInputStream in;
     private DataOutputStream out;
 
-    private String name;
+    private User user;
 
     public ClientHandler(MyServer myServer, Socket socket)
     {
@@ -24,7 +27,6 @@ public class ClientHandler
             this.socket = socket;
             this.in = new DataInputStream(this.socket.getInputStream());
             this.out = new DataOutputStream(this.socket.getOutputStream());
-            this.name = "";
 
             new Thread(() -> {
                 try
@@ -32,7 +34,7 @@ public class ClientHandler
                     this.authentication();
                     this.readMessages();
                 }
-                catch (IOException e)
+                catch (IOException | SQLException e)
                 {
                     e.printStackTrace();
                 }
@@ -56,13 +58,12 @@ public class ClientHandler
             if (str.startsWith(KEY_AUTH))
             {
                 String[] parts = str.split(STR_SPLIT);
-                String nick = this.myServer.getAuthService().getNickByLoginPass(parts[1], parts[2]);
-                if (nick != null)
+                this.user = this.myServer.getAuthService().getUserByLoginPass(parts[1], parts[2]);
+                if (this.user.getNickname() != STR_EMPTY)
                 {
-                    if (!this.myServer.isUserOnline(nick))
+                    if (!this.myServer.isUserOnline(this.user.getNickname()))
                     {
-                        this.sendMsg(String.format(FORMAT_AUTHOK_2_PARAMS, KEY_AUTHOK, nick));
-                        this.name = nick;
+                        this.sendMsg(String.format(FORMAT_AUTHOK_2_PARAMS, KEY_AUTHOK, this.user.getNickname()));
                         this.myServer.subscribe(this);
 
                         return;
@@ -80,12 +81,12 @@ public class ClientHandler
         }
     }
 
-    public void readMessages() throws IOException
+    public void readMessages() throws IOException, SQLException
     {
         while (true)
         {
             String strFromClient = this.in.readUTF();
-            System.out.println(name + " > " + strFromClient);
+            System.out.println(this.user.getNickname() + " > " + strFromClient);
 
             String[] tokens = strFromClient.split(STR_SPLIT);
             if (tokens[0].equals(KEY_END))
@@ -104,8 +105,14 @@ public class ClientHandler
                     message = tokens[2];
                 }
             }
+            else if (tokens[0].equals(KEY_NICK))
+            {
+                this.myServer.getAuthService().changeNickname(this.user.getUsername(), this.user.getPassword(), tokens[1]);
 
-            this.myServer.broadcastMsg(name, message, nick);
+                message = String.format("%s changed his nickname to %s", this.user.getNickname(), tokens[1]);
+            }
+
+            this.myServer.broadcastMsg(this.user.getNickname(), message, nick);
         }
     }
 
@@ -155,6 +162,6 @@ public class ClientHandler
 
     public String getName()
     {
-        return this.name;
+        return this.user.getNickname();
     }
 }

@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,15 +13,15 @@ public class MyServer
 {
     private Map<String, ClientHandler> clients;
     private AuthService authService;
-    private DbProvider dbProvider;
 
     public MyServer()
     {
         try (ServerSocket server = new ServerSocket(SERVER_PORT))
         {
-            authService = new BaseAuthService();
-            authService.start();
-            clients = new HashMap<>();
+            this.authService = new BaseAuthService();
+            this.clients = new HashMap<>();
+
+            this.authService.start();
 
             while (true)
             {
@@ -38,10 +39,7 @@ public class MyServer
         }
         finally
         {
-            if (this.authService != null)
-            {
-                this.authService.stop();
-            }
+            this.stopServices();
         }
     }
 
@@ -97,13 +95,21 @@ public class MyServer
         this.broadcastMsg(builder.toString(), STR_EMPTY);
     }
 
+    public AuthService getAuthService()
+    {
+        return this.authService;
+    }
+
     private String formatMessage(String from, String msg)
     {
         return from + ": " + msg;
     }
 
-    public AuthService getAuthService()
+    private void stopServices()
     {
-        return this.authService;
+        if (this.authService != null)
+        {
+            this.authService.stop();
+        }
     }
 }

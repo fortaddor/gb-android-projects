@@ -13,6 +13,7 @@ public class ChatConsts
     public static final String KEY_CLIENTS = "/clients";
     public static final String KEY_PRIV = "/priv";
     public static final String KEY_EXCEPTION = "/exception";
+    public static final String KEY_NICK = "/nick";
 
     public static final String FORMAT_LOGIN_3_PARAMS = "%s %s %s";
     public static final String FORMAT_AUTHOK_2_PARAMS = "%s %s";
