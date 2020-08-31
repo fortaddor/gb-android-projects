@@ -43,7 +43,7 @@ public class Network implements Closeable
     {
         try
         {
-            connect();
+            this.connect();
             this.out.writeUTF(String.format(FORMAT_LOGIN_3_PARAMS, KEY_AUTH, login, password));
         }
         catch (IOException e)
@@ -98,7 +98,8 @@ public class Network implements Closeable
                 {
                     this.callOnException.callback("Connection to the server interrupted");
                 }
-                finally {
+                finally
+                {
                     this.close();
                 }
             });
