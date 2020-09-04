@@ -4,6 +4,8 @@ import java.io.*;
 
 import static common.ChatConsts.*;
 
+/**
+*/
 public class IoProvider
 {
     public static final String HISTORY_FOLDER = "chathistory";
