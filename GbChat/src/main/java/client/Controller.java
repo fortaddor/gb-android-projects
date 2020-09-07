@@ -33,6 +33,7 @@ public class Controller implements Initializable
 
     private Network network;
     private String nickname;
+    private String loginname;
     private IoProvider ioProvider = new IoProvider();
 
     public void setAuthenticated(boolean authenticated)
@@ -64,6 +65,9 @@ public class Controller implements Initializable
     public void sendAuth()
     {
         this.network.sendAuth(this.loginField.getText(), this.passField.getText());
+
+        this.loginname = this.loginField.getText();
+
         this.loginField.clear();
         this.passField.clear();
     }
@@ -115,9 +119,9 @@ public class Controller implements Initializable
         this.network.setCallOnException(args -> this.showAlert(args[0]));
 
         this.network.setCallOnCloseConnection(args -> {
-            if (!this.nickname.equals(STR_EMPTY))
+            if (!this.loginname.equals(STR_EMPTY))
             {
-                this.ioProvider.writeLines(this.nickname, this.textArea.getText());
+                this.ioProvider.writeLines(this.loginname, this.textArea.getText());
             }
 
             this.setAuthenticated(false);
@@ -127,7 +131,7 @@ public class Controller implements Initializable
             this.setAuthenticated(true);
             this.nickname = args[0];
 
-            this.textArea.setText(this.ioProvider.readLines(this.nickname, HISTORY_LINES_NUMBER));
+            this.textArea.setText(this.ioProvider.readLines(this.loginname, HISTORY_LINES_NUMBER));
         });
 
         this.network.setCallOnMsgReceived(args -> {
