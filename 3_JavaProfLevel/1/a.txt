@@ -1,0 +1,8 @@
+Hello world!
+Привет
+Java core1
+Java core2
+Java core3
+Java core4
+Java core5
+Java core6

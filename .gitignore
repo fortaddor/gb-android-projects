@@ -1,8 +1,5 @@
 .idea
 out
-<<<<<<< HEAD
 classes
 target
-=======
->>>>>>> b3f4fee... Initial commit for chat project
 *.iml

@@ -1,58 +1,65 @@
 package server;
 
+import entity.User;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BaseAuthService implements AuthService
 {
-    private List<Entry> entries;
+    private DbProvider dbProvider;
+
+    public BaseAuthService()
+    {
+        this.dbProvider = new DbProvider();
+    }
 
     @Override
     public void start()
     {
+        try
+        {
+            this.dbProvider.connect();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+
+            this.dbProvider.disconnect();
+        }
+
         System.out.println("Authentication service started");
     }
 
     @Override
     public void stop()
     {
+        this.dbProvider.disconnect();
+
         System.out.println("Authentication service stopped");
     }
 
-
-    public BaseAuthService()
+    @Override
+    public User getUserByLoginPass(String login, String pass)
     {
-        entries = new ArrayList<>();
-        entries.add(new Entry("login1", "pass1", "nick1"));
-        entries.add(new Entry("login2", "pass2", "nick2"));
-        entries.add(new Entry("login3", "pass3", "nick3"));
+        User user = null;
+
+        try
+        {
+            user = this.dbProvider.readUser(login, pass);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return user == null ? new User() : user;
     }
 
     @Override
-    public String getNickByLoginPass(String login, String pass)
+    public void changeNickname(String user, String pass, String newNickname) throws SQLException
     {
-        for (Entry o : entries)
-        {
-            if (o.login.equals(login) && o.pass.equals(pass))
-            {
-                return o.nick;
-            }
-        }
-
-        return null;
-    }
-
-    private static class Entry
-    {
-        private String login;
-        private String pass;
-        private String nick;
-
-        public Entry(String login, String pass, String nick)
-        {
-            this.login = login;
-            this.pass = pass;
-            this.nick = nick;
-        }
+        this.dbProvider.updateNickname(user, pass, newNickname);
     }
 }

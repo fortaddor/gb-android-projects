@@ -1,5 +1,6 @@
 package client;
 
+import io.IoProvider;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,8 @@ import static common.ChatConsts.*;
 
 public class Controller implements Initializable
 {
+    public static final int HISTORY_LINES_NUMBER = 100;
+
     @FXML
     TextArea textArea;
 
@@ -30,50 +33,71 @@ public class Controller implements Initializable
 
     private Network network;
     private String nickname;
+    private IoProvider ioProvider = new IoProvider();
 
     public void setAuthenticated(boolean authenticated)
     {
-        authPanel.setVisible(!authenticated);
-        authPanel.setManaged(!authenticated);
-        msgPanel.setVisible(authenticated);
-        msgPanel.setManaged(authenticated);
-        infoPanel.setVisible(authenticated);
-        infoPanel.setManaged(authenticated);
+        this.authPanel.setVisible(!authenticated);
+        this.authPanel.setManaged(!authenticated);
+
+        this.msgPanel.setVisible(authenticated);
+        this.msgPanel.setManaged(authenticated);
+        this.infoPanel.setVisible(authenticated);
+        this.infoPanel.setManaged(authenticated);
 
         if (!authenticated)
         {
-            nickname = "";
+            this.nickname = STR_EMPTY;
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        setAuthenticated(false);
-        createNetwork();
-        network.connect();
-        passField.requestFocus();
+        this.setAuthenticated(false);
+        this.createNetwork();
+
+        this.network.connect();
+        this.passField.requestFocus();
     }
 
     public void sendAuth()
     {
-        network.sendAuth(loginField.getText(), passField.getText());
-        loginField.clear();
-        passField.clear();
+        this.network.sendAuth(this.loginField.getText(), this.passField.getText());
+        this.loginField.clear();
+        this.passField.clear();
     }
 
     public void sendMsg()
     {
-        if (network.sendMsg(msgField.getText()))
+        if (this.network.sendMsg(this.msgField.getText()))
         {
-            msgField.clear();
-            msgField.requestFocus();
+            this.msgField.clear();
+            this.msgField.requestFocus();
         }
+    }
+
+    public void sendPrivateMsg()
+    {
+        String toNick = this.clientsList.getSelectionModel().getSelectedItem();
+        if (toNick == null)
+        {
+            toNick = STR_EMPTY;
+        }
+
+        this.msgField.setText(KEY_PRIV + STR_BLANK + toNick);
+        this.setCaretPosition(this.msgField);
+    }
+
+    public void changeNick()
+    {
+        this.msgField.setText(KEY_NICK + STR_BLANK);
+        this.setCaretPosition(this.msgField);
     }
 
     public void sendExit()
     {
-        network.sendMsg(KEY_END);
+        this.network.sendMsg(KEY_END);
     }
 
     public void showAlert(String msg)
@@ -87,13 +111,23 @@ public class Controller implements Initializable
     public void createNetwork()
     {
         this.network = new Network();
-        this.network.setCallOnException(args -> showAlert(args[0]));
 
-        this.network.setCallOnCloseConnection(args -> setAuthenticated(false));
+        this.network.setCallOnException(args -> this.showAlert(args[0]));
+
+        this.network.setCallOnCloseConnection(args -> {
+            if (!this.nickname.equals(STR_EMPTY))
+            {
+                this.ioProvider.writeLines(this.nickname, this.textArea.getText());
+            }
+
+            this.setAuthenticated(false);
+        });
 
         this.network.setCallOnAuthenticated(args -> {
-            setAuthenticated(true);
+            this.setAuthenticated(true);
             this.nickname = args[0];
+
+            this.textArea.setText(this.ioProvider.readLines(this.nickname, HISTORY_LINES_NUMBER));
         });
 
         this.network.setCallOnMsgReceived(args -> {
@@ -115,7 +149,7 @@ public class Controller implements Initializable
             }
             else if (tokens[0].equals(KEY_EXCEPTION))
             {
-                showAlert(tokens[1]);
+                this.showAlert(tokens[1]);
             }
             else if (tokens[0].equals(KEY_PRIV))
             {
@@ -126,5 +160,10 @@ public class Controller implements Initializable
                 this.textArea.appendText(msg + STR_LF);
             }
         });
+    }
+
+    private void setCaretPosition(TextField textField)
+    {
+        textField.positionCaret(textField.getText().length() + 1);
     }
 }

@@ -43,8 +43,8 @@ public class Network implements Closeable
     {
         try
         {
-            connect();
-            out.writeUTF(String.format(FORMAT_LOGIN_3_PARAMS, KEY_AUTH, login, password));
+            this.connect();
+            this.out.writeUTF(String.format(FORMAT_LOGIN_3_PARAMS, KEY_AUTH, login, password));
         }
         catch (IOException e)
         {
@@ -54,33 +54,33 @@ public class Network implements Closeable
 
     public void connect()
     {
-        if (socket != null && !socket.isClosed())
+        if (this.socket != null && !this.socket.isClosed())
         {
             return;
         }
 
         try
         {
-            socket = new Socket(SERVER_HOST, SERVER_PORT);
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
+            this.socket = new Socket(SERVER_HOST, SERVER_PORT);
+            this.in = new DataInputStream(this.socket.getInputStream());
+            this.out = new DataOutputStream(this.socket.getOutputStream());
 
             Thread clientListenerThread = new Thread(() -> {
                 try
                 {
                     while (true)
                     {
-                        String msg = in.readUTF();
+                        String msg = this.in.readUTF();
                         String[] tokens = msg.split(STR_SPLIT);
 
                         if (tokens[0].startsWith(KEY_AUTHOK))
                         {
-                            callOnAuthenticated.callback(tokens[1]);
+                            this.callOnAuthenticated.callback(tokens[1]);
                             break;
                         }
                         else
                         {
-                            callOnException.callback(msg);
+                            this.callOnException.callback(msg);
                         }
                     }
 
@@ -91,15 +91,16 @@ public class Network implements Closeable
                         {
                             break;
                         }
-                        callOnMsgReceived.callback(msg);
+                        this.callOnMsgReceived.callback(msg);
                     }
                 }
                 catch (IOException e)
                 {
-                    callOnException.callback("Connection to the server interrupted");
+                    this.callOnException.callback("Connection to the server interrupted");
                 }
-                finally {
-                    close();
+                finally
+                {
+                    this.close();
                 }
             });
 
@@ -131,7 +132,12 @@ public class Network implements Closeable
             }
             else if (tokens[0].equals(KEY_PRIV))
             {
-                callOnMsgReceived.callback(msg);
+                this.callOnMsgReceived.callback(msg);
+            }
+            else if (tokens[0].equals(KEY_NICK))
+            {
+                this.callOnMsgReceived.callback(msg);
+                this.close();
             }
 
             return true;
@@ -146,8 +152,8 @@ public class Network implements Closeable
     @Override
     public void close()
     {
-        callOnCloseConnection.callback();
-        close(in, out, socket);
+        this.callOnCloseConnection.callback();
+        this.close(this.in, this.out, this.socket);
     }
 
     private void close(Closeable... objects)
