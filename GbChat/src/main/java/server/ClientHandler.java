@@ -28,7 +28,7 @@ public class ClientHandler
             this.in = new DataInputStream(this.socket.getInputStream());
             this.out = new DataOutputStream(this.socket.getOutputStream());
 
-            new Thread(() -> {
+            this.myServer.getExecutorService().execute(() -> {
                 try
                 {
                     this.authentication();
@@ -42,7 +42,7 @@ public class ClientHandler
                 {
                     this.closeConnection();
                 }
-            }).start();
+            });
         }
         catch (IOException e)
         {
