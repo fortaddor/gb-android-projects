@@ -3,9 +3,10 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static common.ChatConsts.*;
 
@@ -13,14 +14,16 @@ public class MyServer
 {
     private Map<String, ClientHandler> clients;
     private AuthService authService;
+    private ExecutorService executorService;
 
     public MyServer()
     {
+        this.authService = new BaseAuthService();
+        this.clients = new HashMap<>();
+        this.executorService = Executors. newCachedThreadPool();
+
         try (ServerSocket server = new ServerSocket(SERVER_PORT))
         {
-            this.authService = new BaseAuthService();
-            this.clients = new HashMap<>();
-
             this.authService.start();
 
             while (true)
@@ -100,6 +103,11 @@ public class MyServer
         return this.authService;
     }
 
+    public ExecutorService getExecutorService()
+    {
+        return this.executorService;
+    }
+
     private String formatMessage(String from, String msg)
     {
         return from + ": " + msg;
@@ -110,6 +118,11 @@ public class MyServer
         if (this.authService != null)
         {
             this.authService.stop();
+        }
+
+        if (this.getExecutorService() != null)
+        {
+            this.getExecutorService().shutdown();
         }
     }
 }
