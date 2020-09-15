@@ -5,9 +5,12 @@ import entity.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class BaseAuthService implements AuthService
 {
+    private static final Logger logger = Logger.getLogger(BaseAuthService.class.getName());
+
     private DbProvider dbProvider;
 
     public BaseAuthService()
@@ -29,7 +32,7 @@ public class BaseAuthService implements AuthService
             this.dbProvider.disconnect();
         }
 
-        System.out.println("Authentication service started");
+        this.logger.info("Authentication service started");
     }
 
     @Override
@@ -37,7 +40,7 @@ public class BaseAuthService implements AuthService
     {
         this.dbProvider.disconnect();
 
-        System.out.println("Authentication service stopped");
+        this.logger.info("Authentication service stopped");
     }
 
     @Override
@@ -51,7 +54,7 @@ public class BaseAuthService implements AuthService
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
 
         return user == null ? new User() : user;
