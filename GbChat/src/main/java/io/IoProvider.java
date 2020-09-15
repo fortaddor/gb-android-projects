@@ -1,12 +1,17 @@
 package io;
 
+import server.MyServer;
+
 import java.io.*;
+import java.util.logging.Logger;
 
 import static common.ChatConsts.*;
 
 public class IoProvider
 {
     public static final String HISTORY_FOLDER = "chathistory";
+
+    private static final Logger logger = Logger.getLogger(IoProvider.class.getName());
 
     public IoProvider()
     {
@@ -41,7 +46,7 @@ public class IoProvider
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
         finally
         {
@@ -53,7 +58,7 @@ public class IoProvider
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                    this.logger.severe(e.getStackTrace().toString());
                 }
             }
         }
@@ -71,7 +76,7 @@ public class IoProvider
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
     }
 

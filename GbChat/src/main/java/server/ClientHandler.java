@@ -7,11 +7,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import static common.ChatConsts.*;
 
 public class ClientHandler
 {
+    private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
+
     private MyServer myServer;
     private Socket socket;
     private DataInputStream in;
@@ -36,7 +39,7 @@ public class ClientHandler
                 }
                 catch (IOException | SQLException e)
                 {
-                    e.printStackTrace();
+                    this.logger.severe(e.getStackTrace().toString());
                 }
                 finally
                 {
@@ -124,7 +127,7 @@ public class ClientHandler
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
     }
 
@@ -138,7 +141,7 @@ public class ClientHandler
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
 
         try
@@ -147,7 +150,7 @@ public class ClientHandler
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
 
         try
@@ -156,7 +159,7 @@ public class ClientHandler
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
     }
 

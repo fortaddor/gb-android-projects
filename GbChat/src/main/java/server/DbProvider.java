@@ -3,11 +3,13 @@ package server;
 import entity.User;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class DbProvider
 {
+    private static final Logger logger = Logger.getLogger(DbProvider.class.getName());
+
     private Connection connection;
-    //private Statement statement;
     private PreparedStatement preparedStmt;
 
     public DbProvider()
@@ -29,7 +31,7 @@ public class DbProvider
         }
         catch (SQLException e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
 
         try
@@ -38,7 +40,7 @@ public class DbProvider
         }
         catch (SQLException e)
         {
-            e.printStackTrace();
+            this.logger.severe(e.getStackTrace().toString());
         }
     }
 

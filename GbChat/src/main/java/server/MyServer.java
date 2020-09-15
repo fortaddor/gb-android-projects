@@ -7,11 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 import static common.ChatConsts.*;
 
 public class MyServer
 {
+    private static final Logger logger = Logger.getLogger(MyServer.class.getName());
+
     private Map<String, ClientHandler> clients;
     private AuthService authService;
     private ExecutorService executorService;
@@ -28,17 +31,17 @@ public class MyServer
 
             while (true)
             {
-                System.out.println("Server wait for client connection");
+               this.logger.info("Server wait for client connection");
                 Socket socket = server.accept();
-                System.out.println("Client connected");
+                this.logger.info("Client connected");
 
                 new ClientHandler(this, socket);
             }
         }
         catch (IOException e)
         {
-            System.out.println("Error on server");
-            e.printStackTrace();
+            this.logger.severe("Error on server");
+            this.logger.severe(e.getStackTrace().toString());
         }
         finally
         {
