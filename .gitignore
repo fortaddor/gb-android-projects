@@ -5,3 +5,10 @@ target
 *.iml
 GbChat/chathistory/
 GbChat/logs/
+.gradle
+local.properties
+.DS_Store
+build
+captures
+.externalNativeBuild
+.cxx
