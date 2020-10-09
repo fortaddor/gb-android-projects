@@ -1,0 +1,7 @@
+.idea
+out
+classes
+target
+*.iml
+GbChat/chathistory/
+GbChat/logs/
