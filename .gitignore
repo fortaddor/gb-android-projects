@@ -5,3 +5,4 @@ target
 *.iml
 GbChat/chathistory/
 GbChat/logs/
+.gradle
