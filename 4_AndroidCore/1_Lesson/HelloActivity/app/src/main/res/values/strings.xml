@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Hallo-Aktivität</string>
+    <string name="hello_text">Hallo _Welt!!!</string>
+</resources>
