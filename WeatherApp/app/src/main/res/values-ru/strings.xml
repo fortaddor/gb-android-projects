@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Погода в моём городе</string>
+    <string name="weath_temperature">12°</string>
+    <string name="town_additionalinfo">"доп. информация "</string>
+    <string name="town_selecttown">"Выбрать город "</string>
+    <string name="btn_accept">принять</string>
+    <string name="city_sbk">Шварценбек</string>
+    <string name="city_berlin">Берлин</string>
+    <string name="city_hamburg">Гамбург</string>
+    <string name="city_london">Лондон</string>
+    <string name="city_moscow">Москва</string>
+    <string name="city_newyork">Нью Йорк</string>
 </resources>
