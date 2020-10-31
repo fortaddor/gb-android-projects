@@ -8,10 +8,11 @@ import android.widget.TextView;
 
 import static de.fortaestro.weatherapp.utils.GlobalConsts.*;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity
+{
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -28,18 +29,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         if (requestCode != INPUT_ACTIVITY_RESULT)
         {
             return;
         }
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK)
+        {
             String town = data.getStringExtra("town");
 
-            TextView cityNameTextView = (TextView) findViewById(R.id.city_name);
+            TextView cityNameTextView = this.findViewById(R.id.city_name);
             cityNameTextView.setText(town);
-
         }
     }
 }
