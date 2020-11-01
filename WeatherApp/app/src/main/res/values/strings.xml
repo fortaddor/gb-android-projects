@@ -14,5 +14,6 @@
     <string name="city_london">London</string>
     <string name="city_moscow">Moskau</string>
     <string name="city_newyork">New York</string>
+    <string name="btn_wikiinfo">Stadtinfo in WIKI</string>
 
 </resources>

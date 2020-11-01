@@ -50,6 +50,13 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/buttonWikiInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/btn_wikiinfo" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

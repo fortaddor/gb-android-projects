@@ -12,4 +12,5 @@
     <string name="city_newyork">Нью Йорк</string>
     <string name="town_wind">ветер</string>
     <string name="town_pressure">давление</string>
+    <string name="btn_wikiinfo">Информация о городе</string>
 </resources>
