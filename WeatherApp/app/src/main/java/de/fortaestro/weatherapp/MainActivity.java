@@ -1,6 +1,5 @@
 package de.fortaestro.weatherapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.fortaestro.weatherapp.presenters.MainPresenter;
+import de.fortaestro.weatherapp.presenters.*;
 
 import static de.fortaestro.weatherapp.utils.GlobalConsts.*;
 

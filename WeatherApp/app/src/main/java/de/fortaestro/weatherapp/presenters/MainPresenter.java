@@ -27,7 +27,7 @@ public final class MainPresenter
 
     public String getThemperature()
     {
-        return themperature;
+        return this.themperature;
     }
 
     public void setThemperature(String themperature)
@@ -37,7 +37,7 @@ public final class MainPresenter
 
     public String getTownName()
     {
-        return townName;
+        return this.townName;
     }
 
     public void setTownName(String townName)

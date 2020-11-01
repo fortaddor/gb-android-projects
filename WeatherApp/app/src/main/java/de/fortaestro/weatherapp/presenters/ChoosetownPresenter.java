@@ -28,7 +28,7 @@ public final class ChoosetownPresenter
 
     public String getTownName()
     {
-        return townName;
+        return this.townName;
     }
 
     public void setTownName(String townName)
@@ -38,7 +38,7 @@ public final class ChoosetownPresenter
 
     public boolean isWithWind()
     {
-        return withWind;
+        return this.withWind;
     }
 
     public void setWithWind(boolean withWind)
@@ -48,7 +48,7 @@ public final class ChoosetownPresenter
 
     public boolean isWithPressure()
     {
-        return withPressure;
+        return this.withPressure;
     }
 
     public void setWithPressure(boolean withPressure)
