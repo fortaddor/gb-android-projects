@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import de.fortaestro.weatherapp.presenters.ChoosetownPresenter;
 
 public class ChoosetownActivity extends AppCompatActivity
 {
@@ -22,11 +25,22 @@ public class ChoosetownActivity extends AppCompatActivity
                     "Berlin", "Hamburg", "London", "Moskau", "New York", "Schwarzenbek"
             };
 
+    private ChoosetownPresenter presenter;
+    private EditText townNameEditText;
+    private CheckBox windCheckBox;
+    private CheckBox pressureCheckBox;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choosetown);
+
+        this.presenter = ChoosetownPresenter.getInstance();
+        this.townNameEditText = findViewById(R.id.editTextTown);
+        this.windCheckBox = findViewById(R.id.checkBoxWind);
+        this.pressureCheckBox = findViewById(R.id.checkBoxPressure);
+
 
         this.initListView();
         this.initButtons();
@@ -70,6 +84,27 @@ public class ChoosetownActivity extends AppCompatActivity
         Intent data = new Intent();
         data.putExtra("town", townEditText.getText().toString());
         this.setResult(RESULT_OK, data);
+
         super.finish();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle saveInstanceState)
+    {
+        super.onRestoreInstanceState(saveInstanceState);
+
+        this.townNameEditText.setText(this.presenter.getTownName());
+        this.windCheckBox.setChecked(this.presenter.isWithWind());
+        this.pressureCheckBox.setChecked(this.presenter.isWithPressure());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle saveInstanceState)
+    {
+        super.onSaveInstanceState(saveInstanceState);
+
+        this.presenter.setTownName(this.townNameEditText.getText().toString());
+        this.presenter.setWithWind(this.windCheckBox.isChecked());
+        this.presenter.setWithPressure(this.pressureCheckBox.isChecked());
     }
 }

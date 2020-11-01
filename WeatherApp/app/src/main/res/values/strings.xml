@@ -2,7 +2,8 @@
     <string name="app_name">Wetter in meiner Stadt</string>
     <string name="weath_temperature">12°</string>
     
-    <string name="town_additionalinfo">zusätzliche Infos</string>
+    <string name="town_wind">Wind</string>
+    <string name="town_pressure">Druck</string>
     <string name="town_selecttown">Stadt auswählen</string>
 
     <string name="btn_accept">übernehmen</string>
