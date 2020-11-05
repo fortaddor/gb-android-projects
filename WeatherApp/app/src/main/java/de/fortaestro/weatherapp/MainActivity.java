@@ -1,15 +1,16 @@
 package de.fortaestro.weatherapp;
 
-import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.fortaestro.weatherapp.presenters.MainPresenter;
+import de.fortaestro.weatherapp.presenters.*;
 
 import static de.fortaestro.weatherapp.utils.GlobalConsts.*;
 
@@ -29,14 +30,8 @@ public class MainActivity extends AppCompatActivity
         this.cityNameTextView = findViewById(R.id.city_name);
         this.themperatureTextView = findViewById(R.id.city_themperature);
 
-        this.cityNameTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(getApplicationContext(), ChoosetownActivity.class);
-                startActivityForResult(intent, INPUT_ACTIVITY_RESULT);
-            }
-        });
+        this.initCityName();
+        this.initWikiButton();
 
         String instanceState;
         if (savedInstanceState == null )
@@ -49,6 +44,34 @@ public class MainActivity extends AppCompatActivity
         }
 
         this.LogActivity(instanceState + " - onCreate()", "onCreate");
+    }
+
+    private void initCityName()
+    {
+        this.cityNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(getApplicationContext(), ChoosetownActivity.class);
+                startActivityForResult(intent, INPUT_ACTIVITY_RESULT);
+            }
+        });
+    }
+
+    private void initWikiButton()
+    {
+        Button wikiButton = findViewById(R.id.buttonWikiInfo);
+
+        wikiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://de.wikipedia.org/wiki/" + cityNameTextView.getText();
+
+                Uri uri = Uri.parse(url);
+                Intent browser = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(browser);
+            }
+        });
     }
 
     @Override

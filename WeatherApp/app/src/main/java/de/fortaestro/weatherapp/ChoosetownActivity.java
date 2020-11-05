@@ -20,10 +20,7 @@ import de.fortaestro.weatherapp.presenters.ChoosetownPresenter;
 
 public class ChoosetownActivity extends AppCompatActivity
 {
-    private String[] townArray = new String[]
-            {
-                    "Berlin", "Hamburg", "London", "Moskau", "New York", "Schwarzenbek"
-            };
+    private String[] townArray;
 
     private ChoosetownPresenter presenter;
     private EditText townNameEditText;
@@ -41,6 +38,15 @@ public class ChoosetownActivity extends AppCompatActivity
         this.windCheckBox = findViewById(R.id.checkBoxWind);
         this.pressureCheckBox = findViewById(R.id.checkBoxPressure);
 
+        this.townArray = new String[]
+                {
+                        getResources().getString(R.string.city_berlin),
+                        getResources().getString(R.string.city_hamburg),
+                        getResources().getString(R.string.city_london),
+                        getResources().getString(R.string.city_moscow),
+                        getResources().getString(R.string.city_newyork),
+                        getResources().getString(R.string.city_sbk)
+                };
 
         this.initListView();
         this.initButtons();

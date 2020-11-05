@@ -12,4 +12,5 @@
     <string name="city_newyork">New York</string>
     <string name="town_wind">wind</string>
     <string name="town_pressure">pressure</string>
+    <string name="btn_wikiinfo">Towninfo in WIKI</string>
 </resources>
