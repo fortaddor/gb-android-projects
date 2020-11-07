@@ -10,6 +10,7 @@ import de.fortaestro.lesson5app.cityheraldry.CityHeraldryActivity;
 import de.fortaestro.lesson5app.cityheraldry.CoatOfArmsActivity;
 import de.fortaestro.lesson5app.fragmentmanager.FragmentManagerActivity;
 import de.fortaestro.lesson5app.observer.ObserverActivity;
+import de.fortaestro.lesson5app.timer.TimerActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         Button cityHeraldryButton = findViewById(R.id.buttonCityHeraldry);
         Button fragmentManagerButton = findViewById(R.id.buttonFragmentManager);
         Button observerButton = findViewById(R.id.buttonObserver);
+        Button timerButton = findViewById(R.id.buttonTimer);
 
         cityHeraldryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ObserverActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        timerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), TimerActivity.class);
                 startActivity(intent);
             }
         });
