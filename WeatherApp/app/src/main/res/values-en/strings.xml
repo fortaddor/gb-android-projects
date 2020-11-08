@@ -4,13 +4,8 @@
     <string name="weath_temperature">12°</string>
     <string name="town_selecttown">Select town</string>
     <string name="btn_accept">accept</string>
-    <string name="city_sbk">Schwarzenbek</string>
-    <string name="city_berlin">Berlin</string>
-    <string name="city_hamburg">Hamburg</string>
-    <string name="city_london">London</string>
-    <string name="city_moscow">Moscow</string>
-    <string name="city_newyork">New York</string>
     <string name="town_wind">wind</string>
     <string name="town_pressure">pressure</string>
     <string name="btn_wikiinfo">Towninfo in WIKI</string>
+    <string name="city_sbk">Schwarzenbek</string>
 </resources>

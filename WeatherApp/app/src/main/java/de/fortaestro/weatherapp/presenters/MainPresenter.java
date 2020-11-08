@@ -2,7 +2,7 @@ package de.fortaestro.weatherapp.presenters;
 
 public final class MainPresenter
 {
-    private static MainPresenter instance;
+    private static MainPresenter instance = new MainPresenter();
     private static final Object syncObj = new Object();
 
     private String townName;
@@ -14,15 +14,7 @@ public final class MainPresenter
 
     public static MainPresenter getInstance()
     {
-        synchronized (syncObj)
-        {
-            if (instance == null)
-            {
-                instance = new MainPresenter();
-            }
-
-            return instance;
-        }
+        return instance;
     }
 
     public String getThemperature()
