@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Apps of Lesson5</string>
+    <string name="cityheraldry">City Heraldry</string>
+    <string name="fragmentmanager">Fragment Manager</string>
+    <string name="observer">Observer</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+    <string name="replace">Replace</string>
+    <string name="fragment1">Fragment1</string>
+    <string name="fragment2">Fragment2</string>
+    <string name="fragment3">Fragment3</string>
+    <string name="timer">Timer</string>
+    <string name="reset">Reset</string>
+    <string name="stop">Stop</string>
+    <string name="start">Start</string>
+</resources>
