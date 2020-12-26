@@ -2,15 +2,17 @@ package de.fortaestro.weatherapp;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.fortaestro.weatherapp.presenters.*;
+import de.fortaestro.weatherapp.presenters.MainPresenter;
+import de.fortaestro.weatherapp.utils.ActivityUtils;
 
 import static de.fortaestro.weatherapp.utils.GlobalConsts.*;
 
@@ -18,7 +20,7 @@ public class MainActivity extends AppCompatActivity
 {
     private MainPresenter mainPresenter;
     private TextView cityNameTextView;
-    private TextView themperatureTextView;
+    private TextView temperatureTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity
 
         this.mainPresenter = MainPresenter.getInstance();
         this.cityNameTextView = findViewById(R.id.city_name);
-        this.themperatureTextView = findViewById(R.id.city_themperature);
+        this.temperatureTextView = findViewById(R.id.city_themperature);
 
         this.initCityName();
         this.initWikiButton();
@@ -52,8 +54,23 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getApplicationContext(), ChoosetownActivity.class);
-                startActivityForResult(intent, INPUT_ACTIVITY_RESULT);
+                if (ActivityUtils.getInstance().isOrientationLandscape(getResources().getConfiguration().orientation))
+                {
+                    if (getFragmentManager().findFragmentById(R.id.choosetown) == null)
+                    {
+                        ChoosetownFragment choosetownFragment = new ChoosetownFragment();
+
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.choosetown, choosetownFragment)
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .commit();
+                    }
+                }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), ChoosetownActivity.class);
+                    startActivityForResult(intent, INPUT_ACTIVITY_RESULT);
+                }
             }
         });
     }
@@ -65,13 +82,18 @@ public class MainActivity extends AppCompatActivity
         wikiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://de.wikipedia.org/wiki/" + cityNameTextView.getText();
+            String url = "https://de.wikipedia.org/wiki/" + cityNameTextView.getText();
 
-                Uri uri = Uri.parse(url);
-                Intent browser = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(browser);
+            Uri uri = Uri.parse(url);
+            Intent browser = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(browser);
             }
         });
+    }
+
+    public void update(String townname)
+    {
+        this.cityNameTextView.setText(townname);
     }
 
     @Override
@@ -82,11 +104,16 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        if (resultCode == RESULT_OK)
+        if (resultCode != RESULT_OK)
         {
-            String town = data.getStringExtra("town");
+            return;
+        }
 
-            this.cityNameTextView.setText(town);
+        String townName = data.getStringExtra("town");
+
+        if (!townName.isEmpty())
+        {
+            this.cityNameTextView.setText(townName);
         }
     }
 
@@ -103,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         super.onRestoreInstanceState(saveInstanceState);
         this.LogActivity("Further run! - onRestoreInstanceState()", "onRestoreInstanceState");
 
-        this.themperatureTextView.setText(this.mainPresenter.getThemperature());
+        this.temperatureTextView.setText(this.mainPresenter.getThemperature());
         this.cityNameTextView.setText(this.mainPresenter.getTownName());
     }
 
@@ -127,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(saveInstanceState);
         this.LogActivity("onSaveInstanceState()", "onSaveInstanceState");
 
-        this.mainPresenter.setThemperature((String) this.themperatureTextView.getText());
+        this.mainPresenter.setThemperature((String) this.temperatureTextView.getText());
         this.mainPresenter.setTownName((String) this.cityNameTextView.getText());
     }
 
