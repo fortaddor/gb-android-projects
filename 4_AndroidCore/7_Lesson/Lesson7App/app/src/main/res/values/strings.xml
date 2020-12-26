@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Lesson7App - Login</string>
+
+    <string name="loginName"> Ihr name </string>
+    <string name="password"> Passwort </string>
+    <string name="ok"> Ok </string>
+    <string name="cancel"> Abbrechen </string>
+    <string name="setting">Settings</string>
+    <string name="dark_theme">Dark theme</string>
+</resources>
